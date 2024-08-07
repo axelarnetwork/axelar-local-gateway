@@ -19,7 +19,7 @@
         "prettier": "prettier --write 'src/contracts/**/*.sol' 'test/**/*.js' 'src/**/*.ts'"
     },
     "engines": {
-        "node": "^16.0.0 || ^18.0.0"
+        "node": ">=18"
     },
     "engineStrict": true,
     "repository": {

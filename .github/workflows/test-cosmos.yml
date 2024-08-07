@@ -6,12 +6,15 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: ["18.x"]
+        node-version: ["20.x"]
     steps:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+
+      - name: Fix docker issue
+        run: update-alternatives --set iptables /usr/sbin/iptables-legacy
 
       - name: Checkout code
         uses: actions/checkout@v4
