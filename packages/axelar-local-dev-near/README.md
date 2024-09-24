@@ -23,7 +23,7 @@ Please refer to our [Standalone Environment Setup Guide](../../docs/guide_create
 
 ## API Reference
 
-NEAR local development enviroment is based on [near-workspaces-js](https://github.com/near/workspaces-js) and `NearNetwork` is an extension of `Worker` (available in [near-workspaces-js](https://github.com/near/workspaces-js) package). `NearNetwork` includes everything that `Worker` has and some additional funcionalities:
+NEAR local development environment is based on [near-workspaces-js](https://github.com/near/workspaces-js) and `NearNetwork` is an extension of `Worker` (available in [near-workspaces-js](https://github.com/near/workspaces-js) package). `NearNetwork` includes everything that `Worker` has and some additional funcionalities:
 
 -   `createAccountAndDeployContract(accountId: string, contractWasmPath: string, nearAmount = 200)`: Allows user to quickly create a new NEAR account with a specified amount of NEAR (default - 200 NEAR) and deploy contract to it.
 
