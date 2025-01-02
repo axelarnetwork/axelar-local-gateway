@@ -7,7 +7,7 @@ This module exports the following types:
   - `accountsToFund`: A list of addresses to fund.
   - `fundAmount`: A string representing the amount of ether to fund accounts with. Defaults to `100 ETH`.
   - `chains`: A list with all of the chain names (also determines the number of created networks). Defaults to `["Moonbeam", "Avalanche", "Fantom", "Ethereum", "Polygon"]`.
-  - `relayInterval`?: amount of time between relay of events in miliseconds. Defaults to `2000`.
+  - `relayInterval`?: amount of time between relay of events in milliseconds. Defaults to `2000`.
   - `port`: Port to listen to. Defaults to `8500`.
   - `afterRelay`: A function `(relayData: RelayData) => void` which will be called after each relay. Mainly to be used for debugging.
   - `callback`: A function `(network: Network, info: any) => Promise<null>` that will be called right after setting up each network. Use this to setup additional features, like deploying contracts that already exist on testnet/mainnet.
@@ -24,7 +24,7 @@ This module exports the following types:
   - `gasReceiver`: An `ethers.Contract` object corresponding to the AxelarGasReceiver that receives gas for remote execution. It expects gas between the same two `relay()`s to funtion properly.
   - `ownerWallet`, `operatorWallet`, `relayerWallet`, `adminWallets` `threshold` `lastRelayedBlock`: These are for configuring the gateway and relaying.
   - `deployToken(name, symbol, decimals, cap)`: Deploys a new token on the network. For a token to be supported properly it needs to be deployed on all created networks.
-  - `getTokenContract(sybmol)`: Returns an `ethers.Contract` linked to the ERC20 token represented by `symbol`.
+  - `getTokenContract(symbol)`: Returns an `ethers.Contract` linked to the ERC20 token represented by `symbol`.
   - `giveToken(address, symbol, amount)`: Gives `amount` of `symbol` token to `address`.
   - `getInfo()`: Returns an object with all the information about the `Network`.
   - `relay()`: This method is either equivalent to calling the local instance of this module's `relay()` (see below) or, for remote networks, the host's instance of `relay()`.
@@ -74,7 +74,7 @@ The following is exported by this module.
 - `getNetwork(urlOrProvider, NetworkInfo=null)`: Return `Network` hosted elsewhere into this instance.
 - `setupNetwork(urlOrProvider, NetworkSetup)`: Deploy the gateway and USDC Token on a remote blockchain and return the corresponding `Network`. The only value that is required in `NetworkSetup` is `ownerKey` which is a wallet of a funded account.
 - `listen(port, callback = null)`: This will serve all the created networks on port `port`. Each network is served at `/i` where `i` is the index of the network in `networks` (the first network created is at `/0` and so on).
-- `getAllNetworks(url)`: This will retreive all the networks served by `listen` called from a different instance.
+- `getAllNetworks(url)`: This will retrieve all the networks served by `listen` called from a different instance.
 - `relay()`: A function that passes all the messages to all the gateways and calls the appropriate `IAxelarExecutable` contracts.
 - `getDepostiAddress(sourceNetwork, destinationNetwork, destinationAddress, symbol)`: This function generates a deposit address on `network1` that will route any funds of type `symbol` deposited there (minus some fee) to the `destinationAddress` in `network2`.
 - `getFee(sourceNetwork, destinationNetwork, symbol)`: returns the fee for transferring funds. Is set to a constant `1,000,000`.
@@ -100,7 +100,7 @@ This contract exposes three functions to use:
 This interface is to be implemented for a contract to be able to receive remote contract calls. There are two functions that can be overriden, but depending on the use you may only choose to override one of them only.
 
 - `_execute(string memory sourceChain, string memory sourceAddress, bytes calldata payload)`: This will automatically be called when Axelar relays all messages. `sourceChain` and `sourceAddress` can be used to validate who is making the contract call, and `payload` can be decoded with `abi.decode` to produce any data needed.
-- `_executeWithToken(string memory sourceChain, string memory sourceAddress, bytes calldata payload, string memory symbol, uinst256 amount)`: This is the same as above but it is guaranteed to have also received `amount` token specified by `symbol`. You can use \_getTokenAddress(symbol) to obtain the address of the ERC20 token received.
+- `_executeWithToken(string memory sourceChain, string memory sourceAddress, bytes calldata payload, string memory symbol, uint256 amount)`: This is the same as above but it is guaranteed to have also received `amount` token specified by `symbol`. You can use \_getTokenAddress(symbol) to obtain the address of the ERC20 token received.
 
 ### `AxelarGasReceiver`
 
@@ -109,4 +109,4 @@ This contract is automatically deployed and can be used to pay gas for the desti
 - `receiveGas(string destinationChain, string destinationAddress, bytes payload, address gasToken, uint256 gasAmount)`: Receives `gasAmount` of `gasToken` to execute the contract call specified. The execution will use a gasLimit of `gasAmount / getGasPrice(...)` (see [above](#functionality) for `getGasPrice`).
 - `receiveGasNative(string destinationChain, string destinationAddress, bytes payload)`: As above with the native token as the `gasToken` and `msg.value` as the `gasAmount`.
 - `receiveGasWithToken(string destinationChain, string destinationAddress, bytes payload, string symbol, uint256 amountThrough, address gasToken, uint256 gasAmount)`, `receiveGasNtiveWithToken(string destinationChain, string destinationAddress, bytes payload, string symbol, uint256 amountThrough)`: Similar to the above functions but they are for `callContractWithToken` instead of `callContract`.
-- `ReceiveGas(Native)AndCallRemote(WithToken)(...)`: There are four such functions that will also pass the call to the gateway after receiving gas, for convenience.
+- `ReceiveGas(Native)AndCallRemote(WithToken) (...)`: There are four such functions that will also pass the call to the gateway after receiving gas, for convenience.
