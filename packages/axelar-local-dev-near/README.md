@@ -31,6 +31,6 @@ NEAR local development enviroment is based on [near-workspaces-js](https://githu
 
 -   `stopNetwork()`: Needs to be called at the end of the script, so it stops the `near-sandbox` process which is a local mini-NEAR blockchain.
 
-Additionaly we export a utility function:
+Additionally we export a utility function:
 
 -   `createNearNetwork(config?: Config)`: Creates an instance of `NearNetwork` and starts the `near-sandbox` process. It can take a `Config` object as described in [near-workspaces-js](https://github.com/near/workspaces-js).
